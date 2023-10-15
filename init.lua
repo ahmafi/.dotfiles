@@ -87,7 +87,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -230,7 +230,15 @@ require('lazy').setup({
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-      require("nvim-tree").setup {}
+      require("nvim-tree").setup {
+        update_focused_file = {
+          enable = true,
+        },
+        diagnostics = {
+          enable = true,
+          show_on_dirs = true,
+        },
+      }
     end,
   },
 
@@ -337,7 +345,7 @@ require('lazy').setup({
     config = function()
       vim.o.background = 'dark'
       -- vim.g.sonokai_better_performance = 1
-      vim.g.sonokai_style = 'atlantis'
+      vim.g.sonokai_style = 'andromeda' -- default | atlantis | andromeda | shusia | maia | espersso
       vim.g.sonokai_dim_inactive_windows = 1
       vim.cmd.colorscheme 'sonokai'
     end,
@@ -357,8 +365,8 @@ require('lazy').setup({
             {
               relculright = true,
               segments = {
-                { text = { builtin.foldfunc },    click = "v:lua.ScFa" },
-                { text = { "%s" },                click = "v:lua.ScSa" },
+                { text = { builtin.foldfunc },      click = "v:lua.ScFa" },
+                { text = { "%s" },                  click = "v:lua.ScSa" },
                 { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" }
               }
             }
