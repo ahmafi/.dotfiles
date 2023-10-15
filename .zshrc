@@ -35,3 +35,6 @@ export CAPACITOR_ANDROID_STUDIO_PATH=$HOME/android-studio/bin/studio.sh
 
 # bun
 export PATH="$HOME/.bun/bin:$PATH"
+
+# some pip packages
+export PATH=$PATH:$HOME/.local/bin
