@@ -30,11 +30,11 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-# capacitor
-export CAPACITOR_ANDROID_STUDIO_PATH=$HOME/android-studio/bin/studio.sh
-
 # bun
 export PATH="$HOME/.bun/bin:$PATH"
 
 # some pip packages
 export PATH=$PATH:$HOME/.local/bin
+
+# local zshrc
+source ./zshrc_local
