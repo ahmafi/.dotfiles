@@ -224,4 +224,7 @@ if ! command -v lazygit $ >/dev/null; then
   sudo dnf install lazygit -y
 fi
 
+printf "\n★ setup idea\n"
+ln -s "$PWD/.ideavimrc" "$HOME/.ideavimrc"
+
 printf "\n★ interactive session ★\n"
