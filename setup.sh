@@ -114,6 +114,7 @@ gext --filesystem install \
   scroll-workspaces@gfxmonk.net \
   shamsi-calendar@gnome.scr.ir \
   ShutdownTimer@deminder \
+  run-or-raise@edvard.cz \
   spotify-controller@koolskateguy89 \
   user-theme@gnome-shell-extensions.gcampax.github.com \
   Vitals@CoreCoding.com \
@@ -226,5 +227,11 @@ fi
 
 printf "\n★ setup idea\n"
 ln -s "$PWD/.ideavimrc" "$HOME/.ideavimrc"
+
+printf "\n★ setup run-or-raise gnome extension\n"
+runOrRaiseFile="$HOME/.config/run-or-raise/shortcuts.conf"
+if ! test -f "$initLuaFile"; then
+  ln -s "$PWD/run-or-raise/shortcuts.conf" "$runOrRaiseFile"
+fi
 
 printf "\n★ interactive session ★\n"
