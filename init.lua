@@ -795,10 +795,10 @@ vim.api.nvim_create_autocmd('BufWritePost', {
 })
 
 require('lint').linters_by_ft = {
-  javascript = { 'eslint', 'cspell' },
-  typescript = { 'eslint', 'cspell' },
-  javascriptreact = { 'eslint', 'cspell' },
-  typescriptreact = { 'eslint', 'cspell' },
+  javascript = { 'eslint_d', 'cspell' },
+  typescript = { 'eslint_d', 'cspell' },
+  javascriptreact = { 'eslint_d', 'cspell' },
+  typescriptreact = { 'eslint_d', 'cspell' },
 }
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
