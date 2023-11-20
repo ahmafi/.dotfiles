@@ -374,6 +374,9 @@ require('lazy').setup({
         end
       }
     }
+  },
+  {
+    'sindrets/diffview.nvim'
   }
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart

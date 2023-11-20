@@ -37,4 +37,4 @@ export PATH="$HOME/.bun/bin:$PATH"
 export PATH=$PATH:$HOME/.local/bin
 
 # local zshrc
-source ./zshrc_local
+source $HOME/.dotfiles/.zshrc_local
