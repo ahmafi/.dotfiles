@@ -119,6 +119,7 @@ gext --filesystem install \
   user-theme@gnome-shell-extensions.gcampax.github.com \
   Vitals@CoreCoding.com \
   window-app-switcher-on-active-monitor@NiKnights.com
+rm "$HOME/.config/run-or-raise/shortcuts.conf"
 
 printf "\n★ changing gnome settings\n"
 settings=(
