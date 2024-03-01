@@ -377,6 +377,18 @@ require('lazy').setup({
   },
   {
     'sindrets/diffview.nvim'
+  },
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   }
 
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
@@ -480,6 +492,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
+    layout_strategy = 'vertical',
     mappings = {
       i = {
         ['<C-u>'] = false,
@@ -794,6 +807,11 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   command = 'FormatWrite',
 })
 
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = { "*.go" },
+  command = "setlocal shiftwidth=8 tabstop=8 noexpandtab"
+})
+
 require('lint').linters_by_ft = {
   javascript = { 'eslint_d', 'cspell' },
   typescript = { 'eslint_d', 'cspell' },
@@ -806,6 +824,17 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     require("lint").try_lint()
   end,
 })
+
+
+local format_sync_grp = vim.api.nvim_create_augroup("GoImport", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+   require('go.format').goimport()
+  end,
+  group = format_sync_grp,
+})
+
 -- on_attach
 -- vim.keymap.set("n", "l", edit_or_open,          {desc="Edit Or Open"})
 -- vim.keymap.set("n", "L", vsplit_preview,        {desc="Vsplit Preview"})

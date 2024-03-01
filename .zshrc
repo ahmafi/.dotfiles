@@ -38,3 +38,5 @@ export PATH=$PATH:$HOME/.local/bin
 
 # local zshrc
 source $HOME/.dotfiles/.zshrc_local
+
+export GOBIN=$HOME/go/bin
