@@ -272,14 +272,15 @@ require('lazy').setup({
   {
     'mhartington/formatter.nvim',
     config = function()
+      local util = require('formatter.util')
       require('formatter').setup {
-        logging = false,
+        logging = true,
         filetype = {
           typescript = {
             function()
               return {
                 exe = "prettierd",
-                args = { vim.api.nvim_buf_get_name(0) },
+                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
                 stdin = true
               }
             end
@@ -288,7 +289,7 @@ require('lazy').setup({
             function()
               return {
                 exe = "prettierd",
-                args = { vim.api.nvim_buf_get_name(0) },
+                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
                 stdin = true
               }
             end
@@ -297,7 +298,7 @@ require('lazy').setup({
             function()
               return {
                 exe = "prettierd",
-                args = { vim.api.nvim_buf_get_name(0) },
+                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
                 stdin = true
               }
             end
@@ -306,7 +307,7 @@ require('lazy').setup({
             function()
               return {
                 exe = "prettierd",
-                args = { vim.api.nvim_buf_get_name(0) },
+                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
                 stdin = true
               }
             end
@@ -315,7 +316,7 @@ require('lazy').setup({
             function()
               return {
                 exe = "prettierd",
-                args = { vim.api.nvim_buf_get_name(0) },
+                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
                 stdin = true
               }
             end
@@ -324,10 +325,22 @@ require('lazy').setup({
             function()
               return {
                 exe = "prettierd",
-                args = { vim.api.nvim_buf_get_name(0) },
+                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
                 stdin = true
               }
             end
+          },
+          prisma = {
+            require("formatter.filetypes.any").remove_trailing_whitespace,
+            function()
+              -- Ignore already configured types.
+              -- local defined_types = require("formatter.config").values.filetype
+              -- if defined_types[vim.bo.filetype] ~= nil then
+              --   return nil
+              -- end
+              -- vim.lsp.buf.format({ async = true })
+              vim.lsp.buf.format()
+            end,
           },
         }
       }
@@ -534,7 +547,8 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim',
+    'prisma' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -830,7 +844,7 @@ local format_sync_grp = vim.api.nvim_create_augroup("GoImport", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function()
-   require('go.format').goimport()
+    require('go.format').goimport()
   end,
   group = format_sync_grp,
 })

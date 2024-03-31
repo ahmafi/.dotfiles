@@ -6,6 +6,7 @@ zstyle ':omz:update' mode auto
 zstyle ':omz:update' frequency 12
 
 HIST_STAMPS="yyyy/mm/dd"
+DISABLE_MAGIC_FUNCTIONS=true
 
 plugins=(git)
 
@@ -22,8 +23,8 @@ export EDITOR=nvim
 [[ -f "$HOME/.functions" ]] && source "$HOME/.functions"
 
 # fnm
-export PATH="$HOME/.local/share/fnm:$PATH"
-eval "$(fnm env --use-on-cd)"
+# export PATH="$HOME/.local/share/fnm:$PATH"
+# eval "$(fnm env --use-on-cd)"
 
 # android
 export ANDROID_HOME=$HOME/Android/Sdk
@@ -40,3 +41,7 @@ export PATH=$PATH:$HOME/.local/bin
 source $HOME/.dotfiles/.zshrc_local
 
 export GOBIN=$HOME/go/bin
+
+
+# bun completions
+[ -s "/home/amir/.oh-my-zsh/completions/_bun" ] && source "/home/amir/.oh-my-zsh/completions/_bun"
