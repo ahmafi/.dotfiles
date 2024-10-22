@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir="$HOME/project/dara-backend"
+dir="$HOME/projects/dara-backend"
 
 tmux new-session -c "$dir" -n code -s dara-backend -d
 tmux send-keys 'nvim .' C-m

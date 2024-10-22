@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir="$HOME/project/onyxlabs"
+dir="$HOME/projects/onyxlabs"
 
 tmux new-session -c "$dir" -n code -s onyxlabs -d
 tmux send-keys 'nvim .' C-m

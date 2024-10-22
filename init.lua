@@ -1,423 +1,471 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-
-  And then you can explore or search through `:help lua-guide`
-  - https://neovim.io/doc/user/lua-guide.html
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
---]]
--- Set <space> as the leader key
--- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Install package manager
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  }
+if not vim.uv.fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out,                            "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
--- NOTE: Here is where you install your plugins.
---  You can configure plugins using the `config` key.
---
---  You can also configure plugins after the setup call,
---    as they will be available in your neovim runtime.
+-- Install plugins
 require('lazy').setup({
-  -- NOTE: First, some plugins that don't require any configuration
+  spec = {
 
-  -- Git related plugins
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
+    -- Git related plugins
+    'tpope/vim-fugitive',
+    'tpope/vim-rhubarb',
 
-  -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
+    -- Detect tabstop and shiftwidth automatically
+    'tpope/vim-sleuth',
 
-  -- NOTE: This is where your plugins related to LSP can be installed.
-  --  The configuration is done below. Search for lspconfig to find it below.
-  {
     -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
+    {
+      'neovim/nvim-lspconfig',
+      dependencies = {
+        -- Automatically install LSPs to stdpath for neovim
+        { 'williamboman/mason.nvim', config = true },
+        'williamboman/mason-lspconfig.nvim',
+        'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-      -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
+        -- Useful status updates for LSP
+        {
+          'j-hui/fidget.nvim',
+          config = true
+        },
 
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
-    },
-  },
-
-  {
-    -- Autocompletion
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
-
-      -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
-    },
-  },
-
-  -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
-  {
-    -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      -- See `:help gitsigns.txt`
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-      numhl = true,
-      on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
-
-        -- don't override the built-in and fugitive keymaps
-        local gs = package.loaded.gitsigns
-        vim.keymap.set({ 'n', 'v' }, ']c', function()
-          if vim.wo.diff then return ']c' end
-          vim.schedule(function() gs.next_hunk() end)
-          return '<Ignore>'
-        end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
-        vim.keymap.set({ 'n', 'v' }, '[c', function()
-          if vim.wo.diff then return '[c' end
-          vim.schedule(function() gs.prev_hunk() end)
-          return '<Ignore>'
-        end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
-      end,
-    },
-  },
-
-  -- {
-  --   -- Theme inspired by Atom
-  --   'navarasu/onedark.nvim',
-  --   priority = 1000,
-  --   config = function()
-  --     vim.cmd.colorscheme 'onedark'
-  --   end,
-  -- },
-  --
-  {
-    -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'onedark',
-        component_separators = '|',
-        section_separators = '',
+        -- Additional lua configuration, makes nvim stuff amazing!
+        {
+          "folke/lazydev.nvim",
+          ft = "lua", -- only load on lua files
+          opts = {
+            library = {
+              -- See the configuration section for more details
+              -- Load luvit types when the `vim.uv` word is found
+              { path = "luvit-meta/library", words = { "vim%.uv" } },
+            },
+          },
+        },
+        { "Bilal2453/luvit-meta",    lazy = true }, -- optional `vim.uv` typings
       },
     },
-  },
 
-  {
-    -- Add indentation guides even on blank lines
-    'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help indent_blankline.txt`
-    main = 'ibl',
-    config = function()
-      require('ibl').setup {
-        indent = { char = '┊' },
-        scope = { enabled = false },
-      }
-    end,
-  },
+    { 'farmergreg/vim-lastplace' },
 
-  -- "gc" to comment visual regions/lines
-  {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup {
-        pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-      }
-    end,
-  },
+    {
+      -- Autocompletion
+      'hrsh7th/nvim-cmp',
+      dependencies = {
+        -- Snippet Engine & its associated nvim-cmp source
+        'L3MON4D3/LuaSnip',
+        'saadparwaiz1/cmp_luasnip',
 
-  -- Fuzzy Finder (files, lsp, etc)
-  {
-    'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-      -- Only load if `make` is available. Make sure you have the system
-      -- requirements installed.
-      {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        -- NOTE: If you are having trouble with this installation,
-        --       refer to the README for telescope-fzf-native for more instructions.
-        build = 'make',
-        cond = function()
-          return vim.fn.executable 'make' == 1
+        -- Adds LSP completion capabilities
+        'hrsh7th/cmp-nvim-lsp',
+
+        -- Adds a number of user-friendly snippets
+        'rafamadriz/friendly-snippets',
+
+        'hrsh7th/cmp-emoji',
+        'hrsh7th/cmp-path',
+        'hrsh7th/cmp-buffer',
+        {
+          "David-Kunz/cmp-npm",
+          dependencies = { 'nvim-lua/plenary.nvim' },
+          ft = "json",
+          config = function()
+            require('cmp-npm').setup({})
+          end
+        },
+        'SergioRibera/cmp-dotenv',
+      },
+
+    },
+
+    -- Useful plugin to show you pending keybinds.
+    { 'folke/which-key.nvim',    opts = { preset = "helix" } },
+    {
+      -- Adds git related signs to the gutter, as well as utilities for managing changes
+      'lewis6991/gitsigns.nvim',
+      opts = {
+        signs = {
+          add = { text = '+' },
+          change = { text = '~' },
+          delete = { text = '_' },
+          topdelete = { text = '‾' },
+          changedelete = { text = '~' },
+        },
+        numhl = true,
+        on_attach = function(bufnr)
+          vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk,
+            { buffer = bufnr, desc = 'Preview git hunk' })
+
+          -- don't override the built-in and fugitive keymaps
+          local gs = package.loaded.gitsigns
+          vim.keymap.set({ 'n', 'v' }, ']h', function()
+            if vim.wo.diff then return ']h' end
+            vim.schedule(function() gs.next_hunk() end)
+            return '<Ignore>'
+          end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
+          vim.keymap.set({ 'n', 'v' }, '[h', function()
+            if vim.wo.diff then return '[h' end
+            vim.schedule(function() gs.prev_hunk() end)
+            return '<Ignore>'
+          end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
         end,
       },
     },
-  },
 
-  {
-    -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-      'JoosepAlviste/nvim-ts-context-commentstring'
-    },
-    build = ':TSUpdate',
-  },
-
-  {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require("nvim-tree").setup {
-        update_focused_file = {
-          enable = true,
+    -- {
+    --   -- Theme inspired by Atom
+    --   'navarasu/onedark.nvim',
+    --   priority = 1000,
+    --   config = function()
+    --     vim.cmd.colorscheme 'onedark'
+    --   end,
+    -- },
+    --
+    {
+      -- Set lualine as statusline
+      'nvim-lualine/lualine.nvim',
+      dependencies = { 'nvim-tree/nvim-web-devicons' },
+      -- See `:help lualine.txt`
+      opts = {
+        options = {
+          icons_enabled = true,
+          theme = 'onedark',
+          component_separators = '|',
+          section_separators = '',
+          disabled_filetypes = {
+            statusline = { "NvimTree" }
+          },
+          ignore_focus = { "NvimTree" },
         },
-        diagnostics = {
-          enable = true,
-          show_on_dirs = true,
+        sections = {
+          lualine_a = { 'filename' },
+          lualine_b = { 'branch', 'diff', 'diagnostics' },
+          lualine_c = { '%f' },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location' },
         },
-      }
-    end,
-  },
+      },
+    },
 
-  {
-    'phaazon/hop.nvim',
-    branch = 'v2',
-    config = function()
-      require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
-    end
-  },
+    {
+      -- Add indentation guides even on blank lines
+      'lukas-reineke/indent-blankline.nvim',
+      -- Enable `lukas-reineke/indent-blankline.nvim`
+      -- See `:help indent_blankline.txt`
+      main = 'ibl',
+      config = function()
+        require('ibl').setup {
+          indent = { char = '┊' },
+          scope = { enabled = false },
+        }
+      end,
+    },
 
-  {
-    'windwp/nvim-autopairs',
-    event = "InsertEnter",
-    opts = {}
-  },
+    -- "gc" to comment visual regions/lines
+    {
+      'numToStr/Comment.nvim',
+      config = function()
+        require('Comment').setup {
+          pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+        }
+      end,
+    },
 
-  {
-    'rmagatti/auto-session',
-    config = function()
-      require("auto-session").setup {
-        log_level = "error",
-        -- auto_session_suppress_dirs = { "~/", "~/Downloads", "/" },
-        auto_session_enable_last_session = true,
-      }
-    end
-  },
-  {
-    'mfussenegger/nvim-lint',
-  },
-  {
-    'mhartington/formatter.nvim',
-    config = function()
-      local util = require('formatter.util')
-      require('formatter').setup {
-        logging = true,
-        filetype = {
-          typescript = {
-            function()
-              return {
-                exe = "prettierd",
-                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
-                stdin = true
-              }
-            end
+    -- Fuzzy Finder (files, lsp, etc)
+    {
+      'nvim-telescope/telescope.nvim',
+      branch = '0.1.x',
+      dependencies = {
+        'nvim-lua/plenary.nvim',
+        -- Fuzzy Finder Algorithm which requires local dependencies to be built.
+        -- Only load if `make` is available. Make sure you have the system
+        -- requirements installed.
+        {
+          'nvim-telescope/telescope-fzf-native.nvim',
+          -- NOTE: If you are having trouble with this installation,
+          --       refer to the README for telescope-fzf-native for more instructions.
+          build = 'make',
+          cond = function()
+            return vim.fn.executable 'make' == 1
+          end,
+        },
+      },
+    },
+
+    {
+      "nvim-telescope/telescope-frecency.nvim",
+      config = function()
+        require("telescope").load_extension "frecency"
+      end,
+    },
+
+    { 
+      "smartpde/telescope-recent-files",
+      config = function()
+        require("telescope").load_extension "recent_files"
+      end,
+    },
+
+    {
+      -- Highlight, edit, and navigate code
+      'nvim-treesitter/nvim-treesitter',
+      dependencies = {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+        'JoosepAlviste/nvim-ts-context-commentstring'
+      },
+      build = ':TSUpdate',
+    },
+
+    {
+      "nvim-tree/nvim-tree.lua",
+      version = "*",
+      lazy = false,
+      dependencies = {
+        "nvim-tree/nvim-web-devicons",
+      },
+      config = function()
+        require("nvim-tree").setup {
+          update_focused_file = {
+            enable = true,
           },
-          typescriptreact = {
-            function()
-              return {
-                exe = "prettierd",
-                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
-                stdin = true
-              }
-            end
-          },
-          javascript = {
-            function()
-              return {
-                exe = "prettierd",
-                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
-                stdin = true
-              }
-            end
-          },
-          javascriptreact = {
-            function()
-              return {
-                exe = "prettierd",
-                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
-                stdin = true
-              }
-            end
-          },
-          json = {
-            function()
-              return {
-                exe = "prettierd",
-                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
-                stdin = true
-              }
-            end
-          },
-          css = {
-            function()
-              return {
-                exe = "prettierd",
-                args = { util.escape_path( vim.api.nvim_buf_get_name(0) )},
-                stdin = true
-              }
-            end
-          },
-          prisma = {
-            require("formatter.filetypes.any").remove_trailing_whitespace,
-            function()
-              -- Ignore already configured types.
-              -- local defined_types = require("formatter.config").values.filetype
-              -- if defined_types[vim.bo.filetype] ~= nil then
-              --   return nil
-              -- end
-              -- vim.lsp.buf.format({ async = true })
-              vim.lsp.buf.format()
-            end,
+          diagnostics = {
+            enable = true,
+            show_on_dirs = true,
           },
         }
-      }
-    end
-  },
-  -- {
-  --   "ray-x/lsp_signature.nvim",
-  --   event = "VeryLazy",
-  --   opts = {},
-  --   config = function(_, opts) require 'lsp_signature'.setup(opts) end
-  -- },
-  {
-    "sainnhe/sonokai",
-    priority = 1000,
-    config = function()
-      vim.o.background = 'dark'
-      -- vim.g.sonokai_better_performance = 1
-      vim.g.sonokai_style = 'andromeda' -- default | atlantis | andromeda | shusia | maia | espersso
-      vim.g.sonokai_dim_inactive_windows = 1
-      vim.cmd.colorscheme 'sonokai'
-    end,
-  },
-  {
-    'christoomey/vim-tmux-navigator'
-  },
-  {
-    'kevinhwang91/nvim-ufo',
-    dependencies = {
-      'kevinhwang91/promise-async',
-      {
-        "luukvbaal/statuscol.nvim",
-        config = function()
-          local builtin = require("statuscol.builtin")
-          require("statuscol").setup(
-            {
-              relculright = true,
-              segments = {
-                { text = { builtin.foldfunc },      click = "v:lua.ScFa" },
-                { text = { "%s" },                  click = "v:lua.ScSa" },
-                { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" }
-              }
-            }
-          )
-        end
-      }
-    }
-  },
-  {
-    'sindrets/diffview.nvim'
-  },
-  {
-    "ray-x/go.nvim",
-    dependencies = { -- optional packages
-      "ray-x/guihua.lua",
+      end,
     },
-    config = function()
-      require("go").setup()
-    end,
-    event = { "CmdlineEnter" },
-    ft = { "go", 'gomod' },
-    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
-  }
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
-  --       These are some example plugins that I've included in the kickstart repository.
-  --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
+    {
+      'phaazon/hop.nvim',
+      branch = 'v2',
+      config = function()
+        require 'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+      end
+    },
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
-  --    up-to-date with whatever is in the kickstart repo.
-  --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  --
-  --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
-}, {})
+    {
+      'windwp/nvim-autopairs',
+      event = "InsertEnter",
+      opts = {}
+    },
+
+    {
+      'rmagatti/auto-session',
+      config = function()
+        require("auto-session").setup {
+          log_level = "error",
+          -- auto_session_suppress_dirs = { "~/", "~/Downloads", "/" },
+          auto_session_enable_last_session = true,
+        }
+      end
+    },
+    {
+      'nvimtools/none-ls.nvim',
+      dependencies = {
+        "nvimtools/none-ls-extras.nvim",
+      },
+    },
+    {
+      'davidmh/cspell.nvim',
+    },
+    {
+      'mfussenegger/nvim-lint',
+    },
+    {
+      'mhartington/formatter.nvim',
+      config = function()
+        local util = require('formatter.util')
+        require('formatter').setup {
+          logging = true,
+          filetype = {
+            typescript = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            typescriptreact = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            javascript = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            javascriptreact = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            json = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            jsonc = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            css = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            sql = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            yaml = {
+              function()
+                return {
+                  exe = "prettierd",
+                  args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
+                  stdin = true
+                }
+              end
+            },
+            prisma = {
+              require("formatter.filetypes.any").remove_trailing_whitespace,
+              function()
+                -- Ignore already configured types.
+                -- local defined_types = require("formatter.config").values.filetype
+                -- if defined_types[vim.bo.filetype] ~= nil then
+                --   return nil
+                -- end
+                -- vim.lsp.buf.format({ async = true })
+                vim.lsp.buf.format()
+              end,
+            },
+          }
+        }
+      end
+    },
+    -- {
+    --   "ray-x/lsp_signature.nvim",
+    --   event = "VeryLazy",
+    --   opts = {},
+    --   config = function(_, opts) require 'lsp_signature'.setup(opts) end
+    -- },
+    {
+      "sainnhe/sonokai",
+      priority = 1000,
+      config = function()
+        vim.o.background = 'dark'
+        -- vim.g.sonokai_better_performance = 1
+        vim.g.sonokai_style = 'andromeda' -- default | atlantis | andromeda | shusia | maia | espersso
+        vim.g.sonokai_dim_inactive_windows = 1
+        vim.cmd.colorscheme 'sonokai'
+      end,
+    },
+    {
+      'christoomey/vim-tmux-navigator'
+    },
+    {
+      'kevinhwang91/nvim-ufo',
+      dependencies = {
+        'kevinhwang91/promise-async',
+        {
+          "luukvbaal/statuscol.nvim",
+          config = function()
+            local builtin = require("statuscol.builtin")
+            require("statuscol").setup(
+              {
+                relculright = true,
+                segments = {
+                  { text = { builtin.foldfunc },      click = "v:lua.ScFa" },
+                  { text = { "%s" },                  click = "v:lua.ScSa" },
+                  { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" }
+                }
+              }
+            )
+          end
+        }
+      }
+    },
+    {
+      'sindrets/diffview.nvim'
+    },
+    {
+      "ray-x/go.nvim",
+      dependencies = { -- optional packages
+        "ray-x/guihua.lua",
+      },
+      config = function()
+        require("go").setup()
+      end,
+      event = { "CmdlineEnter" },
+      ft = { "go", 'gomod' },
+      build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+    }
+
+    -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
+    --       These are some example plugins that I've included in the kickstart repository.
+    --       Uncomment any of the lines below to enable them.
+    -- require 'kickstart.plugins.autoformat',
+    -- require 'kickstart.plugins.debug',
+
+    -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
+    --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
+    --    up-to-date with whatever is in the kickstart repo.
+    --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
+    --
+    --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
+    -- { import = 'custom.plugins' },
+
+  },
+})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -475,6 +523,24 @@ vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
+vim.filetype.add({
+  -- Detect and assign filetype based on the extension of the filename
+  extension = {
+    env = "conf",
+  },
+  -- Detect and apply filetypes based on the entire filename
+  -- filename = {
+  --   [".env"] = "dotenv",
+  --   ["env"] = "dotenv",
+  --   ["tsconfig.json"] = "jsonc",
+  -- },
+  -- Detect and apply filetypes based on certain patterns of the filenames
+  pattern = {
+    -- INFO: Match filenames like - ".env.example", ".env.local" and so on
+    ["%.env%.[%w_.-]+"] = "conf",
+  },
+})
+
 -- [[ Basic Keymaps ]]
 vim.keymap.set('n', 's', ':w<cr>')
 
@@ -517,14 +583,29 @@ require('telescope').setup {
     buffers = {
       sort_lastused = true,
     },
+    oldfiles = {
+      cwd_only = true,
+    },
   },
+  extensions = {
+    recent_files = {
+      only_cwd = true,
+    },
+  }
 }
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
+vim.keymap.set('n', '<leader><space>',
+  function()
+    require('telescope').extensions.recent_files.pick()
+  end, { desc = '[?] Find recently opened files' })
+-- vim.keymap.set('n', '<leader><space>',
+--   function()
+--     require('telescope').extensions.frecency.frecency { workspace = 'CWD', path_display = { 'filename_first' } }
+--   end, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader>b', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
@@ -693,17 +774,14 @@ local servers = {
   },
   bashls = {},
   cssls = {},
-  sqlls = {},
-  lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-    },
-  },
+  sqls = {},
+  -- lua_ls = {
+  --   Lua = {
+  --     workspace = { checkThirdParty = false, library = { vim.env.VIMRUNTIME, "${3rd}/luv/library", "${3rd}/busted/library" } },
+  --     telemetry = { enable = false },
+  --   },
+  -- },
 }
-
--- Setup neovim lua configuration
-require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -762,8 +840,8 @@ cmp.setup {
     end,
   },
   mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-j>'] = cmp.mapping.select_next_item(),
+    ['<C-k>'] = cmp.mapping.select_prev_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete {},
@@ -789,10 +867,29 @@ cmp.setup {
         fallback()
       end
     end, { 'i', 's' }),
+    ['<C-x>'] = cmp.mapping(
+      cmp.mapping.complete({
+        config = {
+          sources = cmp.config.sources({
+            { name = 'cmp_ai' },
+          }),
+        },
+      }),
+      { 'i' }
+    ),
+  },
+  window = {
+    documentation = cmp.config.window.bordered()
   },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'emoji' },
+    { name = 'path' },
+    { name = 'lazydev' },
+    { name = 'buffer' },
+    { name = 'npm',     keyword_length = 4 },
+    { name = 'dotenv' },
   },
 }
 
@@ -827,10 +924,10 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 require('lint').linters_by_ft = {
-  javascript = { 'eslint_d', 'cspell' },
-  typescript = { 'eslint_d', 'cspell' },
-  javascriptreact = { 'eslint_d', 'cspell' },
-  typescriptreact = { 'eslint_d', 'cspell' },
+  javascript = { 'eslint_d' },
+  typescript = { 'eslint_d' },
+  javascriptreact = { 'eslint_d' },
+  typescriptreact = { 'eslint_d' },
 }
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
@@ -848,6 +945,31 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
   group = format_sync_grp,
 })
+
+local cspell = require('cspell')
+local null_ls = require("null-ls")
+null_ls.setup {
+  sources = {
+    -- cspell.diagnostics.with({
+    --   diagnostics_postprocess = function(diagnostic)
+    --     diagnostic.severity = vim.diagnostic.severity["WARN"]
+    --   end,
+    --   filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "json", "html", "yaml"}
+    -- }),
+    -- cspell.code_actions,
+    -- require("none-ls.code_actions.eslint"),
+    -- require("none-ls.diagnostics.eslint_d").with({
+    --   method = null_ls.methods.DIAGNOSTICS_ON_SAVE
+    -- }),
+    -- null_ls.builtins.code_actions.gitsigns.with({
+    --   config = {
+    --     filter_actions = function(title)
+    --       return title:lower():match("blame") == nil   -- filter out blame actions
+    --     end,
+    --   },
+    -- })
+  }
+}
 
 -- on_attach
 -- vim.keymap.set("n", "l", edit_or_open,          {desc="Edit Or Open"})

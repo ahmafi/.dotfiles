@@ -3,5 +3,6 @@ alias myip="curl https://ipinfo.io/json" # or /ip for plain-text ip
 alias speedtest="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python - --bytes"
 alias onyxlabs="$HOME/.dotfiles/tmux-sessions/onyxlabs.sh"
 alias goldika="$HOME/.dotfiles/tmux-sessions/goldika.sh"
+alias goldika_fullstack="$HOME/.dotfiles/tmux-sessions/goldika-fullstack.sh"
 alias budget="$HOME/.dotfiles/tmux-sessions/budget.sh"
 alias prices="$HOME/.dotfiles/tmux-sessions/prices.sh"

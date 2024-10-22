@@ -8,7 +8,7 @@ zstyle ':omz:update' frequency 12
 HIST_STAMPS="yyyy/mm/dd"
 DISABLE_MAGIC_FUNCTIONS=true
 
-plugins=(git)
+plugins=(git dotenv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -42,6 +42,9 @@ source $HOME/.dotfiles/.zshrc_local
 
 export GOBIN=$HOME/go/bin
 
+export PATH="${PATH}:${GOBIN}"
+
+export PATH="${PATH}:${HOME}/npm/bin"
 
 # bun completions
 [ -s "/home/amir/.oh-my-zsh/completions/_bun" ] && source "/home/amir/.oh-my-zsh/completions/_bun"

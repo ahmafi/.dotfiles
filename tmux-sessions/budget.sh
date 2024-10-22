@@ -1,12 +1,12 @@
 #!/bin/bash
 
-dir="$HOME/project/budget"
+dir="$HOME/projects/budget"
 
 tmux new-session -c "$dir" -n code -s budget -d
 tmux send-keys 'nvim .' C-m
 
 tmux new-window -c "$dir" -n run
-tmux send-keys 'docker container start dara-postgres' C-m
+tmux send-keys 'docker container start budget-postgres' C-m
 tmux send-keys 'pnpm run dev' C-m
 
 tmux new-window -c "$dir" -n git
