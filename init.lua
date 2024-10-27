@@ -578,6 +578,9 @@ require('telescope').setup {
         ['<C-d>'] = false,
       },
     },
+    preview = {
+      filesize_limit = 0.2 -- MB
+    }
   },
   pickers = {
     buffers = {

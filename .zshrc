@@ -48,3 +48,9 @@ export PATH="${PATH}:${HOME}/npm/bin"
 
 # bun completions
 [ -s "/home/amir/.oh-my-zsh/completions/_bun" ] && source "/home/amir/.oh-my-zsh/completions/_bun"
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
+
+export PATH="$HOME/.atuin/bin:$PATH"
