@@ -93,6 +93,20 @@ require('lazy').setup({
 
     },
 
+    {
+      "antosha417/nvim-lsp-file-operations",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        -- Uncomment whichever supported plugin(s) you use
+        -- "nvim-tree/nvim-tree.lua",
+        -- "nvim-neo-tree/neo-tree.nvim",
+        -- "simonmclean/triptych.nvim"
+      },
+      config = function()
+        require("lsp-file-operations").setup()
+      end,
+    },
+
     -- Useful plugin to show you pending keybinds.
     { 'folke/which-key.nvim',    opts = { preset = "helix" } },
     {
@@ -209,13 +223,27 @@ require('lazy').setup({
     },
 
     {
+      "AckslD/nvim-neoclip.lua",
+      dependencies = {
+        { 'nvim-telescope/telescope.nvim' },
+      },
+      config = function()
+        require('neoclip').setup({
+          default_register = '+'
+        })
+      end,
+    },
+
+    { 'nvim-telescope/telescope-ui-select.nvim' },
+
+    {
       "nvim-telescope/telescope-frecency.nvim",
       config = function()
         require("telescope").load_extension "frecency"
       end,
     },
 
-    { 
+    {
       "smartpde/telescope-recent-files",
       config = function()
         require("telescope").load_extension "recent_files"
@@ -266,16 +294,16 @@ require('lazy').setup({
       opts = {}
     },
 
-    {
-      'rmagatti/auto-session',
-      config = function()
-        require("auto-session").setup {
-          log_level = "error",
-          -- auto_session_suppress_dirs = { "~/", "~/Downloads", "/" },
-          auto_session_enable_last_session = true,
-        }
-      end
-    },
+    -- {
+    --   'rmagatti/auto-session',
+    --   config = function()
+    --     require("auto-session").setup {
+    --       log_level = "error",
+    --       -- auto_session_suppress_dirs = { "~/", "~/Downloads", "/" },
+    --       auto_session_enable_last_session = true,
+    --     }
+    --   end
+    -- },
     {
       'nvimtools/none-ls.nvim',
       dependencies = {
@@ -309,7 +337,8 @@ require('lazy').setup({
                 return {
                   exe = "prettierd",
                   args = { util.escape_path(vim.api.nvim_buf_get_name(0)) },
-                  stdin = true
+                  stdin = true,
+                  try_node_modules = true
                 }
               end
             },
@@ -448,8 +477,12 @@ require('lazy').setup({
       event = { "CmdlineEnter" },
       ft = { "go", 'gomod' },
       build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
-    }
-
+    },
+    {
+      "mfussenegger/nvim-ansible"
+    },
+    { "yioneko/nvim-vtsls" },
+    { "almo7aya/openingh.nvim" }
     -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
     --       These are some example plugins that I've included in the kickstart repository.
     --       Uncomment any of the lines below to enable them.
@@ -526,7 +559,7 @@ vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 vim.filetype.add({
   -- Detect and assign filetype based on the extension of the filename
   extension = {
-    env = "conf",
+    env = "conf"
   },
   -- Detect and apply filetypes based on the entire filename
   -- filename = {
@@ -542,7 +575,14 @@ vim.filetype.add({
 })
 
 -- [[ Basic Keymaps ]]
-vim.keymap.set('n', 's', ':w<cr>')
+vim.keymap.set('n', 's', '<cmd>w<cr>')
+vim.keymap.set({ 'n', 'v' }, 'L', '$')
+vim.keymap.set({ 'n', 'v' }, 'H', '^')
+vim.keymap.set({ 'n', 'v' }, '<A-j>', ':m .+1<cr>==')
+vim.keymap.set({ 'n', 'v' }, '<A-k>', ':m .-2<cr>==')
+vim.keymap.set('n', 'U', '<cmd>redo<cr>')
+-- vim.keymap.set({'n','x'}, ':', ';', { noremap = true})
+-- vim.keymap.set({'n','x'}, ';', ':', { noremap = true})
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
@@ -555,6 +595,8 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- ufo folding
 vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+
+vim.keymap.set("n", "<leader>q", "<cmd>bd<CR>", { desc = "Close Buffer" })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -598,7 +640,19 @@ require('telescope').setup {
 }
 
 -- Enable telescope fzf native, if installed
-pcall(require('telescope').load_extension, 'fzf')
+require('telescope').load_extension("fzf")
+require("telescope").load_extension("ui-select")
+require("telescope").load_extension("neoclip")
+
+vim.keymap.set('n', '<leader>ft',
+  function()
+    local filetypes = vim.fn.getcompletion('', 'filetype')
+    vim.ui.select(filetypes, {
+      prompt = 'Select file type:'
+    }, function(choice)
+      vim.bo.filetype = choice
+    end)
+  end, { desc = '[?] Find recently opened files' })
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader><space>',
@@ -617,7 +671,7 @@ vim.keymap.set('n', '<leader>/', function()
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
-vim.keymap.set('n', '<leader>ss', require('auto-session.session-lens').search_session, { desc = '[S]earch [S]essions' })
+-- vim.keymap.set('n', '<leader>ss', require('auto-session.session-lens').search_session, { desc = '[S]earch [S]essions' })
 
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
@@ -626,6 +680,7 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]resume' })
+vim.keymap.set('n', '<leader>sc', require('telescope').extensions.neoclip.default, { desc = '[S]earch [R]resume' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -649,6 +704,7 @@ require('nvim-treesitter.configs').setup {
     },
   },
   textobjects = {
+
     select = {
       enable = true,
       lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
@@ -698,7 +754,7 @@ require('nvim-treesitter.configs').setup {
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+-- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Configure LSP ]]
 --  This function gets run when an LSP connects to a particular buffer.
@@ -754,7 +810,7 @@ end
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  tsserver = {
+  ts_ls = {
     init_options = {
       preferences = {
         -- other preferences...
@@ -784,6 +840,11 @@ local servers = {
   --     telemetry = { enable = false },
   --   },
   -- },
+  ansiblels = {},
+  -- nginx_language_server = {
+  --   filetypes = {'nginx'},
+  --   command = "nginx-language-server"
+  -- }
 }
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
@@ -819,6 +880,7 @@ require('mason-tool-installer').setup {
     'cspell',
     'eslint_d',
     'shellcheck',
+    'ansible-lint',
 
     -- Formatters
     'prettierd',
@@ -826,6 +888,9 @@ require('mason-tool-installer').setup {
     'sqlfmt'
   }
 }
+
+-- require("lspconfig.configs").vtsls = require("vtsls").lspconfig
+-- require("lspconfig").vtsls.setup{}
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
@@ -836,7 +901,11 @@ require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
-  enabled = true,
+  enabled = function ()
+        buftype = vim.api.nvim_buf_get_option(0, "buftype")
+        if buftype == "prompt" then return false end
+        return true
+    end,
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
@@ -897,7 +966,7 @@ cmp.setup {
 }
 
 -- [[ configure nvim-tree ]]
-vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeFocus<cr>", { silent = true, noremap = true })
+-- vim.api.nvim_set_keymap("n", "<leader>e", ":NvimTreeFocus<cr>", { silent = true, noremap = true })
 
 -- [[ Configure hop ]]
 local hop = require('hop')
