@@ -18,6 +18,7 @@ return {
                 -- go
                 "goimports",
                 "gopls",
+                "go-debug-adapter",
                 -- sql
                 "sql-formatter",
                 "sqlfluff",
