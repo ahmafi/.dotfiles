@@ -30,7 +30,7 @@
 	"buffer_font_size": 20.0,
 	"theme": {
 		"mode": "system",
-		"light": "One Light",
+		"light": "Catppuccin Latte - No Italics",
 		"dark": "Catppuccin Macchiato - No Italics"
 	},
 	"languages": {
@@ -73,5 +73,17 @@
 		"groovy": true,
 		"catppuccin": true,
 		"catppuccin-icons": true
-	}
+	},
+	"tab_bar": {
+	  "show": false
+	},
+	"title_bar": {
+	  "show_sign_in": false
+	},
+	"project_panel": {
+	  "button": true
+	},
+	"use_smartcase_search": true,
+	"use_system_path_prompts": false,
+	"use_system_prompts": false
 }

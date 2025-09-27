@@ -7,21 +7,56 @@
 // from the command palette.
 [
   {
-    "context": "Workspace",
+    "context": "Editor && vim_mode == normal",
     "bindings": {
-      // "shift shift": "file_finder::Toggle"
+      "s": "workspace::Save"
     }
   },
   {
-    "context": "Editor && vim_mode == insert",
+    "context": "Workspace || (VimControl && !menu) || Terminal",
     "bindings": {
-      // "j k": "vim::NormalBefore"
+      "down": "file_finder::Toggle"
     }
   },
   {
     "context": "Editor && vim_mode == normal",
     "bindings": {
-      "s": "workspace::Save"
+      "t": "project_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "t": "project_panel::ToggleFocus",
+      "a": "project_panel::NewFile",
+      "r": "project_panel::Rename",
+      "x": "project_panel::Cut",
+      "y": "project_panel::Copy",
+      "p": "project_panel::Paste",
+      "d": "project_panel::Delete",
+      "s": "project_panel::OpenSplitHorizontal",
+      "o": "workspace::OpenWithSystem"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "q q": "pane::CloseActiveItem"
+    }
+  },
+  {
+      "context": "Editor && VimControl && !VimWaiting && !menu || ProjectPanel || Terminal",
+      "bindings": {
+        "ctrl-h": "workspace::ActivatePaneLeft",
+        "ctrl-l": "workspace::ActivatePaneRight",
+        "ctrl-k": "workspace::ActivatePaneUp",
+        "ctrl-j": "workspace::ActivatePaneDown"
+      }
+  },
+  {
+    "context": "Workspace || Terminal",
+    "bindings": {
+      "ctrl-n": "tab_switcher::Toggle"
     }
   }
 ]
