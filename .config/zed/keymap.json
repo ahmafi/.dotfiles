@@ -6,57 +6,86 @@
 // To see the default key bindings run `zed: open default keymap`
 // from the command palette.
 [
-  {
-    "context": "Editor && vim_mode == normal",
-    "bindings": {
-      "s": "workspace::Save"
-    }
-  },
-  {
-    "context": "Workspace || (VimControl && !menu) || Terminal",
-    "bindings": {
-      "down": "file_finder::Toggle"
-    }
-  },
-  {
-    "context": "Editor && vim_mode == normal",
-    "bindings": {
-      "t": "project_panel::ToggleFocus"
-    }
-  },
-  {
-    "context": "ProjectPanel && not_editing",
-    "bindings": {
-      "t": "project_panel::ToggleFocus",
-      "a": "project_panel::NewFile",
-      "r": "project_panel::Rename",
-      "x": "project_panel::Cut",
-      "y": "project_panel::Copy",
-      "p": "project_panel::Paste",
-      "d": "project_panel::Delete",
-      "s": "project_panel::OpenSplitHorizontal",
-      "o": "workspace::OpenWithSystem"
-    }
-  },
-  {
-    "context": "Editor",
-    "bindings": {
-      "q q": "pane::CloseActiveItem"
-    }
-  },
-  {
-      "context": "Editor && VimControl && !VimWaiting && !menu || ProjectPanel || Terminal",
-      "bindings": {
-        "ctrl-h": "workspace::ActivatePaneLeft",
-        "ctrl-l": "workspace::ActivatePaneRight",
-        "ctrl-k": "workspace::ActivatePaneUp",
-        "ctrl-j": "workspace::ActivatePaneDown"
-      }
-  },
-  {
-    "context": "Workspace || Terminal",
-    "bindings": {
-      "ctrl-n": "tab_switcher::Toggle"
-    }
-  }
+	{
+		"context": "Editor && vim_mode == normal",
+		"bindings": {
+			"s": "workspace::Save"
+		}
+	},
+	{
+		"context": "Workspace || (VimControl && !menu) || Terminal",
+		"bindings": {
+			"down": "file_finder::Toggle"
+		}
+	},
+	{
+		"context": "Editor && vim_mode == normal",
+		"bindings": {
+			"t": "project_panel::ToggleFocus"
+		}
+	},
+	{
+		"context": "ProjectPanel && not_editing",
+		"bindings": {
+			"t": "project_panel::ToggleFocus",
+			"a": "project_panel::NewFile",
+			"r": "project_panel::Rename",
+			"x": "project_panel::Cut",
+			"y": "project_panel::Copy",
+			"p": "project_panel::Paste",
+			"d": "project_panel::Delete",
+			"s": "project_panel::OpenSplitHorizontal",
+			"o": "workspace::OpenWithSystem"
+		}
+	},
+	{
+		"context": "Editor",
+		"bindings": {
+			"q q": "pane::CloseActiveItem",
+			"ctrl-q": "pane::CloseActiveItem"
+		}
+	},
+	{
+		"context": "Editor && VimControl && !VimWaiting && !menu || Dock",
+		"bindings": {
+			"ctrl-h": "workspace::ActivatePaneLeft",
+			"ctrl-l": "workspace::ActivatePaneRight",
+			"ctrl-k": "workspace::ActivatePaneUp",
+			"ctrl-j": "workspace::ActivatePaneDown"
+		}
+	},
+	{
+		"context": "Workspace || Terminal",
+		"bindings": {
+			"ctrl-n": "tab_switcher::Toggle"
+		}
+	},
+	{
+		"context": "vim_mode == normal || vim_mode == visual",
+		"bindings": {
+			"f": ["vim::PushSneak", {}],
+			"F": ["vim::PushSneakBackward", {}]
+		}
+	},
+	{
+		"context": "vim_mode == visual",
+		"bindings": {
+			"shift-s": "vim::PushAddSurrounds"
+		}
+	},
+	{
+		"context": "Workspace",
+		"bindings": {
+			"ctrl-t": "terminal_panel::Toggle"
+		}
+	},
+	{
+		"context": "VimControl && !menu",
+		"bindings": {
+			"left": "vim::WrappingLeft",
+			"right": "vim::WrappingRight",
+			"h": "vim::WrappingLeft",
+			"l": "vim::WrappingRight"
+		}
+	}
 ]

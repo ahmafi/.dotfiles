@@ -68,22 +68,33 @@
 		}
 	},
 	"auto_install_extensions": {
-	  "html": true,
+		"html": true,
 		"biome": true,
 		"groovy": true,
 		"catppuccin": true,
 		"catppuccin-icons": true
 	},
 	"tab_bar": {
-	  "show": false
+		"show": false
 	},
 	"title_bar": {
-	  "show_sign_in": false
+		"show_sign_in": false
 	},
 	"project_panel": {
-	  "button": true
+		"button": true
 	},
 	"use_smartcase_search": true,
 	"use_system_path_prompts": false,
-	"use_system_prompts": false
+	"use_system_prompts": false,
+	"scroll_beyond_last_line": "off",
+	"vim": {
+		"use_smartcase_find": true
+	},
+	"diagnostics": {
+		"inline": {
+			"enabled": true,
+			"max_severity": "error"
+		}
+	}
+	// "soft_wrap": "bounded"
 }
