@@ -54,3 +54,7 @@ export PATH="${PATH}:${HOME}/npm/bin"
 eval "$(atuin init zsh)"
 
 export PATH="$HOME/.atuin/bin:$PATH"
+
+## New stuff
+
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
