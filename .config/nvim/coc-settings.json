@@ -1,0 +1,17 @@
+{
+	"snippets.ultisnips.pythonPrompt": false,
+	"Lua.workspace.library": [
+		"/opt/nvim-linux-x86_64/share/nvim/runtime"
+	],
+	"coc.preferences.formatOnSave": true,
+	"tailwindCSS.headwind.runOnSave": true,
+	"pretty-ts-errors.codeBlockHighlightType": "typescript",
+	"cSpellExt.enableDictionaries": [
+		"persian"
+	],
+	"cSpell.language": "en,fa",
+	"cSpell.userWords": [
+		"zivars"
+	],
+	"json.format.enable": false,
+}
