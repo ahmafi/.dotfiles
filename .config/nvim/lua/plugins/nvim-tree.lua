@@ -9,6 +9,14 @@ return {
 
         config = function()
             local nvimTree = require("nvim-tree")
+
+            local VIEW_WIDTH_FIXED = 30
+            local view_width_max = VIEW_WIDTH_FIXED
+
+            local function get_view_width_max()
+                return view_width_max
+            end
+
             nvimTree.setup {
                 diagnostics = {
                     enable = true,
@@ -33,14 +41,12 @@ return {
                 update_focused_file = {
                     enable = true,
                 },
-                -- view = {
-                --     float = {
-                --         enable = false,
-                --     },
-                --     width = {
-                --         max = -1,
-                --     },
-                -- },
+                view = {
+                    width = {
+                        min = 30,
+                        max = get_view_width_max,
+                    },
+                },
             }
 
             local nvimTreeApi = require("nvim-tree.api")
@@ -75,8 +81,10 @@ return {
 
             local toggleFocus = function()
                 if vim.bo.filetype == "NvimTree" then
+                    view_width_max = VIEW_WIDTH_FIXED
                     vim.cmd("wincmd p")
                 else
+                    view_width_max = -1
                     nvimTreeApi.tree.open()
                 end
             end
