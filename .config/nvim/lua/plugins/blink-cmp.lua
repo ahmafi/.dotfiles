@@ -5,8 +5,11 @@ return {
     config = function()
         require("blink.cmp").setup({
             keymap = { preset = "enter" },
-            completion = { documentation = { auto_show = true }, menu = { border = 'rounded' } },
-            accept = { auto_brackets = { enabled = false }, },
+            completion = {
+                documentation = { auto_show = true },
+                menu = { border = 'rounded' },
+                accept = { auto_brackets = { enabled = false }, }
+            },
             sources = {
                 default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
                 providers = {
