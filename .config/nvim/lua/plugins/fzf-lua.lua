@@ -60,6 +60,10 @@ return {
             fzf.combine({ pickers = "oldfiles;files" })
         end);
 
+        vim.keymap.set("n", "<C-j>", function()
+            fzf.combine({ pickers = "oldfiles;files" })
+        end);
+
         vim.keymap.set("n", "<leader>sg", fzf.live_grep_native);
 
         vim.keymap.set("n", "gd", fzf.lsp_definitions);
