@@ -40,12 +40,13 @@ return {
             fzf_colors = {
                 ["fg+"] = { "fg", { "Constant" } }
             },
-            winopts = {
-                width = 0.5,
-                preview = {
-                    hidden = true
-                },
-            },
+
+            -- winopts = {
+            --     width = 0.5,
+            --     preview = {
+            --         hidden = true
+            --     },
+            -- },
 
             oldfiles = {
                 cwd_only = true,
