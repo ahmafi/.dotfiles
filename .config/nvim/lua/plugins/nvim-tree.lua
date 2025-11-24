@@ -68,23 +68,22 @@ return {
             --     return 0
             -- end
 
-            -- vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
-            --     callback = function()
-            --         local currentTab = vim.api.nvim_get_current_tabpage()
-            --         print("hi" .. vim.bo.filetype)
-            --         if vim.bo.filetype ~= "NvimTree" then
-            --             tabLatestWindow[currentTab] = vim.api.nvim_get_current_win()
-            --             print(vim.inspect(tabLatestWindow))
-            --         end
-            --     end
-            -- })
+            vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+                callback = function()
+                    if vim.bo.filetype ~= "NvimTree" then
+                        view_width_max = VIEW_WIDTH_FIXED
+                    else
+                        view_width_max = -1
+                    end
+                end
+            })
 
             local toggleFocus = function()
                 if vim.bo.filetype == "NvimTree" then
-                    view_width_max = VIEW_WIDTH_FIXED
+                    -- view_width_max = VIEW_WIDTH_FIXED
                     vim.cmd("wincmd p")
                 else
-                    view_width_max = -1
+                    -- view_width_max = -1
                     nvimTreeApi.tree.open()
                 end
             end
