@@ -10,9 +10,14 @@ return {
             docker_language_server = {},
             docker_compose_language_service = {},
             openscad_lsp = {},
+            clangd = {
+                cmd = {"/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config"}
+            },
+            cmake = {}
         }
 
         for server, config in pairs(servers) do
+            vim.lsp.config(server, config)
             vim.lsp.enable(server)
         end
 

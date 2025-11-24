@@ -3,6 +3,9 @@ return {
     config = function()
         require("conform").setup({
             formatters_by_ft = {
+                c = { "clang-format" },
+                cpp = { "clang-format" },
+                cmake = { "gersemi" },
                 -- javascript = { lsp_format = "first" },
                 -- javascriptreact = { lsp_format = "first" },
                 -- typescript = { lsp_format = "first" },
@@ -11,11 +14,17 @@ return {
                 -- jsonc = { lsp_format = "first" },
                 -- css = { lsp_format = "first" },
                 -- scss = { lsp_format = "first" },
-                lua = { lsp_format = "first" }
+                lua = { lsp_format = "first" },
             },
             format_on_save = {
-
+                lsp_format = "fallback",
+                timeout_ms = 1000,
             }
+            -- format_on_save = function(bufnr)
+            --     vim.api.nvim_buf_call
+            --     print(bufnr)
+            --     return {}
+            -- end
         })
 
         -- vim.api.nvim_create_autocmd("BufWritePre", {
