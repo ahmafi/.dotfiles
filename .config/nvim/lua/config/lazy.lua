@@ -58,6 +58,13 @@ vim.diagnostic.config({
 -- rtl support
 vim.opt.termbidi = true
 
+vim.filetype.add({
+    pattern = {
+        ["compose.*%.ya?ml"] = "yaml.docker-compose",
+        ["docker%-compose.*%.ya?ml"] = "yaml.docker-compose",
+    },
+})
+
 -- TODO:
 -- - fold
 -- - indent
