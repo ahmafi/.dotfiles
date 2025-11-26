@@ -11,9 +11,22 @@ return {
             docker_compose_language_service = {},
             openscad_lsp = {},
             clangd = {
-                cmd = {"/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config"}
+                cmd = { "/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config" }
             },
-            cmake = {}
+            neocmake = {
+                cmd = { "neocmakelsp", "stdio" },
+                init_options = {
+                    format = {
+                        enable = true
+                    },
+                    lint = {
+                        enable = true
+                    },
+                    scan_cmake_in_package = true -- default is true
+                }
+                -- root_markers = { "CMakeLists.txt" },
+                -- filetypes = { "cmake", "CMakeLists.txt" },
+            }
         }
 
         for server, config in pairs(servers) do

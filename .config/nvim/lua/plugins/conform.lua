@@ -5,7 +5,7 @@ return {
             formatters_by_ft = {
                 c = { "clang-format" },
                 cpp = { "clang-format" },
-                cmake = { "gersemi" },
+                -- cmake = { "gersemi" },
                 -- javascript = { lsp_format = "first" },
                 -- javascriptreact = { lsp_format = "first" },
                 -- typescript = { lsp_format = "first" },
