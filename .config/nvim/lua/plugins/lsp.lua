@@ -11,7 +11,8 @@ return {
             docker_compose_language_service = {},
             openscad_lsp = {},
             clangd = {
-                cmd = { "/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config" }
+                -- cmd = { "/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config" }
+                cmd = { "clangd", "--enable-config" }
             },
             neocmake = {
                 cmd = { "neocmakelsp", "stdio" },
