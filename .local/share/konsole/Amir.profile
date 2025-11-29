@@ -1,8 +1,8 @@
 [Appearance]
 AntiAliasFonts=true
 BoldIntense=false
-ColorScheme=Breeze
-Font=VazirCodeHack Nerd Font,14,-1,5,50,0,0,0,0,0
+ColorScheme=Catppuccin-Mocha
+Font=VazirCodeHack Nerd Font,16,-1,5,50,0,0,0,0,0
 
 [General]
 Command=/bin/zsh

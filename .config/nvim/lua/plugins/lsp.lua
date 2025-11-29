@@ -12,7 +12,7 @@ return {
             openscad_lsp = {},
             clangd = {
                 -- cmd = { "/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config" }
-                cmd = { "clangd", "--enable-config" }
+                cmd = { "clangd", "--enable-config", "--function-arg-placeholders=0" }
             },
             neocmake = {
                 cmd = { "neocmakelsp", "stdio" },
@@ -27,7 +27,12 @@ return {
                 }
                 -- root_markers = { "CMakeLists.txt" },
                 -- filetypes = { "cmake", "CMakeLists.txt" },
-            }
+            },
+            -- sqlls = {},
+            sqls = {
+                cmd = { "sqls", "--config", vim.loop.cwd() .. "/sqls.yml" },
+            },
+            -- sqruff = {},
         }
 
         for server, config in pairs(servers) do

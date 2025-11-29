@@ -103,6 +103,8 @@ export PATH="$PATH:$GOPATH/bin"
 export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
+export PATH="$PATH:$HOME/.local/bin"
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 

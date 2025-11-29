@@ -5,6 +5,7 @@ return {
             formatters_by_ft = {
                 c = { "clang-format" },
                 cpp = { "clang-format" },
+                sql = { "sql_formatter" },
                 -- cmake = { "gersemi" },
                 -- javascript = { lsp_format = "first" },
                 -- javascriptreact = { lsp_format = "first" },
@@ -17,7 +18,7 @@ return {
                 lua = { lsp_format = "first" },
             },
             format_on_save = {
-                lsp_format = "fallback",
+                lsp_format = "never",
                 timeout_ms = 1000,
             }
             -- format_on_save = function(bufnr)
