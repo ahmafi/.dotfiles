@@ -105,6 +105,8 @@ export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 export PATH="$PATH:$HOME/.local/bin"
 
+export PATH="$PATH:$HOME/.android/sdk/platform-tools"
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
