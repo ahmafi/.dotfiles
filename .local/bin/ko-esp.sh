@@ -18,6 +18,7 @@ tmux new-window -c "$dir" -n git
 tmux send-keys 'me lazygit' C-m
 
 tmux new-window -c "$esp_examples_dir" -n examples
+tmux send-keys 'get_idf' C-m
 
 tmux select-window -t code
 tmux -2 attach-session
