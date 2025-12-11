@@ -6,6 +6,8 @@ return {
                 c = { "clang-format" },
                 cpp = { "clang-format" },
                 sql = { "sql_formatter" },
+                -- go = { "gofumpt" },
+                go = { "goimports" },
                 -- cmake = { "gersemi" },
                 -- javascript = { lsp_format = "first" },
                 -- javascriptreact = { lsp_format = "first" },

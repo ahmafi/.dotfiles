@@ -33,6 +33,7 @@ return {
                 cmd = { "sqls", "--config", vim.loop.cwd() .. "/sqls.yml" },
             },
             -- sqruff = {},
+            gopls = {},
         }
 
         for server, config in pairs(servers) do
