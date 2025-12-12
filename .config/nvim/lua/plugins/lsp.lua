@@ -31,6 +31,7 @@ return {
             -- sqlls = {},
             sqls = {
                 cmd = { "sqls", "--config", vim.loop.cwd() .. "/sqls.yml" },
+                root_markers = { "sqls.yml" },
             },
             -- sqruff = {},
             gopls = {},

@@ -5,7 +5,9 @@ return {
             formatters_by_ft = {
                 c = { "clang-format" },
                 cpp = { "clang-format" },
-                sql = { "sql_formatter" },
+                sql = { "sqlfluff" },
+                -- sql = { lsp_format = "first" },
+                -- sql = { "sql_formatter" },
                 -- go = { "gofumpt" },
                 go = { "goimports" },
                 -- cmake = { "gersemi" },
@@ -20,8 +22,8 @@ return {
                 lua = { lsp_format = "first" },
             },
             format_on_save = {
-                lsp_format = "never",
-                timeout_ms = 1000,
+                lsp_format = "fallback",
+                timeout_ms = 10000,
             }
             -- format_on_save = function(bufnr)
             --     vim.api.nvim_buf_call
@@ -46,11 +48,12 @@ return {
 
         vim.api.nvim_create_autocmd("BufWritePost", {
             desc = "Format after save",
-            pattern = "*",
+            pattern = "*.{ts,tsx,css,html,js,jsx,json}",
             group = vim.api.nvim_create_augroup("BiomeFixAll", { clear = true }),
             callback = function(ev)
                 -- vim.cmd("silent! write")
                 local file = vim.api.nvim_buf_get_name(ev.buf)
+                print(file)
                 vim.fn.jobstart({ "bunx", "biome", "check", "--write", file }, {
                     on_exit = function()
                         -- reload buffer only if file still exists
