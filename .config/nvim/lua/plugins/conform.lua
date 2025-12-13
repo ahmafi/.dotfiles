@@ -53,7 +53,6 @@ return {
             callback = function(ev)
                 -- vim.cmd("silent! write")
                 local file = vim.api.nvim_buf_get_name(ev.buf)
-                print(file)
                 vim.fn.jobstart({ "bunx", "biome", "check", "--write", file }, {
                     on_exit = function()
                         -- reload buffer only if file still exists
