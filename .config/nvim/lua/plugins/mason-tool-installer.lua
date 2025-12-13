@@ -6,6 +6,7 @@ return {
             ensure_installed = {
                 -- web
                 "biome",
+                "oxlint",
                 "vue-language-server",
                 "vtsls",
                 "tailwindcss-language-server",
@@ -23,6 +24,9 @@ return {
                 "sqls",
                 -- lua
                 "lua-language-server",
+                -- docker
+                "docker-language-server",
+                "docker-compose-language-service",
             },
             auto_update = true,
             debounce_hours = 8,

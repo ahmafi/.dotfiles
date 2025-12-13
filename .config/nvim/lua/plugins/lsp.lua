@@ -13,9 +13,10 @@ return {
         }
 
         local servers = {
-            lua_ls = {},
-            biome = {},
+            oxlint = {},
             tailwindcss = {},
+            biome = {},
+            lua_ls = {},
             docker_language_server = {},
             docker_compose_language_service = {},
             openscad_lsp = {},
