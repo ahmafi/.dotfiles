@@ -21,7 +21,8 @@ return {
                     hop = true,
                     mason = true,
                     notify = true,
-                }
+                },
+                no_underline = true, -- Force no underline
             })
 
             vim.cmd.colorscheme("catppuccin")

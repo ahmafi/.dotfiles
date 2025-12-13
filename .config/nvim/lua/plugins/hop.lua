@@ -4,7 +4,7 @@ return {
     config = function()
         local hop = require("hop");
         hop.setup({
-            keys = 'etovxqpdygfblzhckisuran'
+            keys = 'etovxqpdygfblzhckisuran',
         })
 
         vim.keymap.set("n", "f", function()
