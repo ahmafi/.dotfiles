@@ -89,6 +89,7 @@ return {
             end
 
             vim.keymap.set("n", "t", toggleFocus)
+            vim.keymap.set("n", "T", "<cmd>NvimTreeToggle<cr>")
         end,
     }
 }
