@@ -27,6 +27,8 @@ return {
                 -- docker
                 "docker-language-server",
                 "docker-compose-language-service",
+                -- markdown
+                "remark-language-server",
             },
             auto_update = true,
             debounce_hours = 8,

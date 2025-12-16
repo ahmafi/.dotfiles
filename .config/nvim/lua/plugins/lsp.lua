@@ -45,6 +45,7 @@ return {
             },
             -- sqruff = {},
             gopls = {},
+            remark_ls = {},
         }
 
         local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
