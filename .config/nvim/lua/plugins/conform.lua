@@ -20,11 +20,18 @@ return {
                 -- css = { lsp_format = "first" },
                 -- scss = { lsp_format = "first" },
                 lua = { lsp_format = "first" },
+                -- svelte = { lsp_format = "never" },
             },
-            format_on_save = {
-                lsp_format = "fallback",
-                timeout_ms = 10000,
-            }
+            -- format_on_save = {
+            --     lsp_format = "fallback",
+            --     timeout_ms = 10000,
+            -- }
+            format_on_save = function(bufnr)
+                if vim.bo[bufnr].filetype == "svelte" then
+                    return nil
+                end
+                return { timeout_ms = 500, lsp_format = "fallback" }
+            end,
             -- format_on_save = function(bufnr)
             --     vim.api.nvim_buf_call
             --     print(bufnr)
