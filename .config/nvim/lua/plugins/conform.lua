@@ -48,7 +48,7 @@ return {
 
         vim.api.nvim_create_autocmd("BufWritePost", {
             desc = "Format after save",
-            pattern = "*.{ts,tsx,css,scss,html,js,jsx,json,mjs,cjs,mjsx,cjsx}",
+            pattern = "*.{ts,tsx,css,scss,html,js,jsx,json,jsonc,mjs,cjs,mjsx,cjsx,svelte}",
             group = vim.api.nvim_create_augroup("BiomeFixAll", { clear = true }),
             callback = function(ev)
                 -- vim.cmd("silent! write")

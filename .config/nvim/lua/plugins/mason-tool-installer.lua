@@ -29,6 +29,8 @@ return {
                 "docker-compose-language-service",
                 -- markdown
                 "remark-language-server",
+                -- svelte
+                "svelte-language-server",
             },
             auto_update = true,
             debounce_hours = 8,
