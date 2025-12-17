@@ -20,17 +20,21 @@ return {
                 -- css = { lsp_format = "first" },
                 -- scss = { lsp_format = "first" },
                 lua = { lsp_format = "first" },
-                -- svelte = { lsp_format = "never" },
+                svelte = { "prettier", lsp_format = "never" },
+                json = { "prettier" },
+                typescript = { "prettier" },
+                css = { "prettier" },
+                html = { "prettier" },
             },
             -- format_on_save = {
             --     lsp_format = "fallback",
             --     timeout_ms = 10000,
             -- }
             format_on_save = function(bufnr)
-                if vim.bo[bufnr].filetype == "svelte" then
-                    return nil
-                end
-                return { timeout_ms = 500, lsp_format = "fallback" }
+                -- if vim.bo[bufnr].filetype == "svelte" then
+                --     return nil
+                -- end
+                return { timeout_ms = 2000, lsp_format = "fallback" }
             end,
             -- format_on_save = function(bufnr)
             --     vim.api.nvim_buf_call
@@ -59,6 +63,12 @@ return {
             group = vim.api.nvim_create_augroup("BiomeFixAll", { clear = true }),
             callback = function(ev)
                 -- vim.cmd("silent! write")
+
+                local prettierConfigFile = vim.fs.root(0, ".prettierrc")
+                if prettierConfigFile then
+                    return
+                end
+
                 local file = vim.api.nvim_buf_get_name(ev.buf)
                 vim.fn.jobstart({ "bunx", "biome", "check", "--write", file }, {
                     on_exit = function()

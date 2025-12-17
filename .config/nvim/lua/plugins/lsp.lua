@@ -15,7 +15,13 @@ return {
         local servers = {
             oxlint = {},
             tailwindcss = {},
-            biome = {},
+            biome = {
+                filetypes =
+                { "astro", "css", "graphql", "html", "javascript", "javascriptreact", "json", "jsonc", "typescript",
+                    "typescript.tsx", "typescriptreact", "vue",
+                    -- "svelte"
+                }
+            },
             lua_ls = {},
             docker_language_server = {},
             docker_compose_language_service = {},
