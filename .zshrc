@@ -133,3 +133,4 @@ export PATH="$PATH:$HOME/.android/sdk/platform-tools"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias me="mullvad-exclude"
 alias get_idf='. $HOME/esp/esp-idf/export.sh'
+alias cargo="cargo-1.85"
