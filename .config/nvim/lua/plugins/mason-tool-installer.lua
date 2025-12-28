@@ -32,6 +32,8 @@ return {
                 "remark-language-server",
                 -- svelte
                 "svelte-language-server",
+                -- protobuf
+                "buf"
             },
             auto_update = true,
             debounce_hours = 8,

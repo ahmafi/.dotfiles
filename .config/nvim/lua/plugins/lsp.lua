@@ -53,6 +53,7 @@ return {
             gopls = {},
             remark_ls = {},
             svelte = {},
+            buf_ls = {},
         }
 
         local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
