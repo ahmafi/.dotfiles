@@ -26,10 +26,10 @@ return {
             docker_language_server = {},
             docker_compose_language_service = {},
             openscad_lsp = {},
-            clangd = {
-                -- cmd = { "/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config" }
-                cmd = { "clangd", "--enable-config", "--function-arg-placeholders=0" }
-            },
+            -- clangd = {
+            --     -- cmd = { "/home/amir/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd", "--enable-config" }
+            --     cmd = { "clangd", "--enable-config", "--function-arg-placeholders=0" }
+            -- },
             neocmake = {
                 cmd = { "neocmakelsp", "stdio" },
                 init_options = {
@@ -55,6 +55,9 @@ return {
             svelte = {},
             buf_ls = {},
         }
+
+        local esp32 = require("esp32")
+        servers.clangd = esp32.lsp_config()
 
         local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
 
