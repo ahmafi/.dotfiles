@@ -8,7 +8,10 @@ if [[ -v TMUX ]]; then
     exit 1
 fi
 
-tmux new-session -c "$dir" -n code -s kaarone_esp -d
+session=kaarone_esp
+
+tmux new-session -c "$dir" -n code -s "$session"  -d
+tmux set -t "$session" status-style bg='#256940'
 tmux send-keys 'get_idf && nvim .' C-m
 
 tmux new-window -c "$dir" -n run

@@ -6,8 +6,10 @@ if [[ -v TMUX ]]; then
     echo "Already attached to a session"
     exit 1
 fi
+session=kaarone_svapp
 
-tmux new-session -c "$dir" -n code -s kaarone_svapp -d
+tmux new-session -c "$dir" -n code -s "$session"  -d
+tmux set -t "$session" status-style bg='#7a532c'
 tmux send-keys 'nvim .' C-m
 
 tmux new-window -c "$dir" -n run
