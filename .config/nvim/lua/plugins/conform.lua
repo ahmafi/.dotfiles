@@ -5,7 +5,8 @@ return {
             formatters_by_ft = {
                 c = { "clang-format" },
                 cpp = { "clang-format" },
-                sql = { "sqlfluff" },
+                sql = { "pg_format" },
+                -- sql = { "sqlfluff" },
                 -- sql = { lsp_format = "first" },
                 -- sql = { "sql_formatter" },
                 -- go = { "gofumpt" },
