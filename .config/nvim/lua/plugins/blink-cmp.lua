@@ -4,6 +4,7 @@ return {
     version = '1.*',
     config = function()
         require("blink.cmp").setup({
+            snippets = { preset = 'luasnip' },
             keymap = { preset = "enter" },
             completion = {
                 documentation = { auto_show = true },
@@ -23,5 +24,7 @@ return {
             fuzzy = { implementation = "prefer_rust_with_warning" },
             signature = { enabled = true },
         })
+
+        require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
     end
 }

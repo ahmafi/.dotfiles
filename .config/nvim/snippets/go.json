@@ -1,0 +1,26 @@
+{
+  "handler": {
+    "prefix": "handler",
+    "body": [
+	"package ${TM_DIRECTORY/^.+\\/(.*)$/$1/}",
+	"",
+	"import \"context\"",
+	"",
+	"type ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}Input struct {",
+	"	Body struct {",
+	"	}",
+	"}",
+	"",
+	"type ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}OutputBody struct {",
+	"}",
+	"",
+	"type ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}Output struct {",
+	"	Body ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}OutputBody",
+	"}",
+	"",
+	"func (s *Service) CheckOtp(ctx context.Context, input *${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}Input) (*${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}OutputBody, error) {",
+	"	panic(\"not implemented\") // TODO: implement",
+	"}"
+    ]
+  }
+}
