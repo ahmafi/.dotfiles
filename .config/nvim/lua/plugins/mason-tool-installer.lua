@@ -33,7 +33,9 @@ return {
                 -- svelte
                 "svelte-language-server",
                 -- protobuf
-                "buf"
+                "buf",
+                -- json
+                "fixjson"
             },
             auto_update = true,
             debounce_hours = 8,

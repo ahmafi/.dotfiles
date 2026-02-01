@@ -12,13 +12,14 @@
 	"}",
 	"",
 	"type ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}OutputBody struct {",
+	"	Message string `json:\"message,omitempty\"`",
 	"}",
 	"",
 	"type ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}Output struct {",
 	"	Body ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}OutputBody",
 	"}",
 	"",
-	"func (s *Service) CheckOtp(ctx context.Context, input *${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}Input) (*${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}OutputBody, error) {",
+	"func (s *Service) CheckOtp(ctx context.Context, input *${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}Input) (*${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}Output, error) {",
 	"	panic(\"not implemented\") // TODO: implement",
 	"}"
     ]

@@ -14,7 +14,13 @@ return {
 
         local servers = {
             oxlint = {},
-            tailwindcss = {},
+            tailwindcss = {
+                settings = {
+                    tailwindCSS = {
+                        classFunctions = { "cva", "cx", "twMerge", "clsx" }
+                    }
+                }
+            },
             biome = {
                 filetypes =
                 { "astro", "css", "graphql", "html", "javascript", "javascriptreact", "json", "jsonc", "typescript",
