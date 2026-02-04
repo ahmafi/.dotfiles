@@ -1,13 +1,13 @@
 #!/bin/bash
 
-dir="$HOME/projects/market-khan/goapi"
+dir="$HOME/projects/shoplee/goapi"
 
 if [[ -v TMUX ]]; then
     echo "Already attached to a session"
     exit 1
 fi
 
-session=mk_goapi
+session=sh_goapi
 
 tmux new-session -c "$dir" -n code -s "$session"  -d
 tmux set -t "$session" status-style bg='#79d4fd'

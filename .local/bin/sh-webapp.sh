@@ -1,12 +1,12 @@
 #!/bin/bash
 
-dir="$HOME/projects/market-khan/webapp"
+dir="$HOME/projects/shoplee/webapp"
 
 if [[ -v TMUX ]]; then
     echo "Already attached to a session"
     exit 1
 fi
-session=mk_webapp
+session=sh_webapp
 
 tmux new-session -c "$dir" -n code -s "$session"  -d
 tmux set -t "$session" status-style bg='#23272f'

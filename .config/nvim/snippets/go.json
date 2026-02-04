@@ -23,5 +23,45 @@
 			"\tpanic(\"not implemented\") // TODO: implement",
 			"}"
 		]
+	},
+	"service": {
+		"prefix": "service",
+		"body": [
+			"package ${TM_DIRECTORY/^.+\\/(.*)$/$1/}",
+			"",
+			"import (",
+			"\t\"net/http\"",
+			"",
+			"\t\"github.com/danielgtaylor/huma/v2\"",
+			")",
+			"",
+			"type Service struct {",
+			"\tr Repo",
+			"}",
+			"",
+			"func New(r Repo) *Service {",
+			"\ts := &Service{",
+			"\t\tr: r,",
+			"\t}",
+			"",
+			"\treturn s",
+			"}",
+			"",
+			"func (s *Service) RegisterRoutes(userApi huma.API) {",
+			"\ttags := []string{\"${TM_DIRECTORY/^.+\\/(.*)$/$1/}\"}",
+			"",
+			"\thuma.Register(userApi, huma.Operation{",
+			"\t\tMethod:      http.MethodPost,",
+			"\t\tPath:        \"/\",",
+			"\t\tOperationID: \"\",",
+			"\t\tTags:        tags,",
+			"\t\tSummary:     \"\",",
+			"\t}, s.Create)",
+			"}"
+		]
+	},
+	"Huma 500 error": {
+		"prefix": "hu500",
+		"body": ["return nil, huma.Error500InternalServerError(\"\")"]
 	}
 }
