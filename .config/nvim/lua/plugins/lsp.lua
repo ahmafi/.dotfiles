@@ -13,6 +13,7 @@ return {
         }
 
         local servers = {
+            yamlls = {},
             oxlint = {},
             tailwindcss = {
                 settings = {
