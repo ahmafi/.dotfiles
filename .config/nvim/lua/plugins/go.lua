@@ -6,6 +6,8 @@ return {
     config = function()
         require("go").setup({
             luasnip = true,
+            tag_transform = "camelcase",
+            tag_options = "",
         })
 
         local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
