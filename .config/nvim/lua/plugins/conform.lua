@@ -32,9 +32,12 @@ return {
             --     timeout_ms = 10000,
             -- }
             format_on_save = function(bufnr)
-                -- if vim.bo[bufnr].filetype == "svelte" then
-                --     return nil
-                -- end
+                if vim.bo[bufnr].filetype == "typescript" then
+                    return nil
+                end
+                if vim.bo[bufnr].filetype == "typescriptreact" then
+                    return nil
+                end
                 return { timeout_ms = 2000, lsp_format = "fallback" }
             end,
             -- format_on_save = function(bufnr)

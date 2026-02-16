@@ -6,7 +6,7 @@ return {
     config = function()
         require("go").setup({
             luasnip = true,
-            tag_transform = "camelcase",
+            tag_transform = "snakecase",
             tag_options = "",
         })
 
