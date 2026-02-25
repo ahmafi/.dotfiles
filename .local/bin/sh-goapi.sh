@@ -21,3 +21,6 @@ tmux send-keys 'me lazygit' C-m
 
 tmux select-window -t code
 tmux -2 attach-session
+
+tmux new-window -c "$dir" -n db
+tmux send-keys 'nvim -c DBUI' C-m
