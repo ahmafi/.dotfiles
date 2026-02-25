@@ -52,10 +52,10 @@ return {
                 -- filetypes = { "cmake", "CMakeLists.txt" },
             },
             -- sqlls = {},
-            sqls = {
-                cmd = { "sqls", "--config", vim.loop.cwd() .. "/sqls.yml" },
-                root_markers = { "sqls.yml" },
-            },
+            -- sqls = {
+            --     cmd = { "sqls", "--config", vim.loop.cwd() .. "/sqls.yml" },
+            --     root_markers = { "sqls.yml" },
+            -- },
             -- sqruff = {},
             gopls = {},
             remark_ls = {},
